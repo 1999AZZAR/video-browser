@@ -205,13 +205,6 @@ h1, h2 {
     padding: 2rem;
 }
 
-#video-player {
-    display: flex;
-    max-width: 100%;
-    height: auto;
-    margin: 2rem;
-}
-
 .back-link {
     display: inline-block;
     color: var(--tertiary-color);
@@ -242,10 +235,11 @@ h1, h2 {
 }
 
 #video-player {
+    display: flex;
+    margin: 2rem;
     max-width: 100%;
     width: -webkit-fill-available;
     height: auto;
-    background-color: var(--senary-color);
     border-radius: 8px;
     box-shadow: 0px 0px 5px 8px rgba(0, 0, 0, 0.1);
 }
