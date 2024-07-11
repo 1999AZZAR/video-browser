@@ -11,6 +11,7 @@ This project is a Flask application for streaming videos from a specified direct
 - [API Endpoints](#api-endpoints)
 - [Template Details](#template-details)
 - [Caching](#caching)
+- [Demo](#demo)
 - [License](#license)
 - [Acknowledgements](#acknowledgements)
 
@@ -123,6 +124,13 @@ VIDEO_DIR = '/path/to/your/video/directory'
 ## Caching
 
 This application uses `Flask-Caching` to cache the directory structure and related videos to improve performance. The cache timeout is set to 300 seconds (5 minutes).
+
+## Demo
+
+![demo 1](demo/1.png)
+![demo 2](demo/2.png)
+![demo 3](demo/3.png)
+![demo 4](demo/4.png)
 
 ## License
 
