@@ -203,7 +203,7 @@ function renderRelatedVideos(videos) {
     }
     videos.forEach(video => {
         const videoElement = document.createElement('div');
-        videoElement.className = 'grid-item';
+        videoElement.className = relatedCurrentView === 'grid' ? 'grid-item' : 'list-item';
         videoElement.innerHTML = `
             <img src="/static/image/video.png" alt="Video thumbnail">
             <span>${video.name}</span>
@@ -219,6 +219,21 @@ function renderRelatedVideos(videos) {
 // Make sure this part is included in your video.html or adjust accordingly
 document.addEventListener('DOMContentLoaded', function() {
     const videoPlayer = document.getElementById('video-player');
+    const relatedGridViewBtn = document.getElementById('related-grid-view-btn');
+    const relatedListViewBtn = document.getElementById('related-list-view-btn');
+    let relatedCurrentView = 'grid';
+
+    relatedGridViewBtn.addEventListener('click', () => setRelatedView('grid'));
+    relatedListViewBtn.addEventListener('click', () => setRelatedView('list'));
+
+    function setRelatedView(view) {
+        relatedCurrentView = view;
+        const relatedVideosContainer = document.getElementById('related-videos');
+        relatedVideosContainer.className = `${view}-view`;
+        relatedGridViewBtn.classList.toggle('active', view === 'grid');
+        relatedListViewBtn.classList.toggle('active', view === 'list');
+        fetchRelatedVideos(folderPath);
+    }
     if (videoPlayer) {
         const currentVideoPath = videoPlayer.querySelector('source').src;
         console.log('Current video path:', currentVideoPath);
