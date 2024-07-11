@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Video Browser</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+    <link href="https://fonts.googleapis.com/css2?family=Kalnia:wght@100..700&display=swap" rel="stylesheet">
+    <link rel="icon" type="image/x-icon" href="{{ url_for('static', filename='image/icon.png') }}">
+</head>
+<body>
+    <div class="container">
+        <h1>Browser</h1>
+        <div class="search-container">
+            <input type="text" id="search-input" placeholder="Search videos...">
+            <button id="search-button"></button>
+        </div>
+        <div class="view-toggle">
+            <button id="grid-view-btn" class="active"></button>
+            <button id="list-view-btn"></button>
+        </div>
+        <div id="file-structure" class="grid-view"></div>
+    </div>
+    <script src="{{ url_for('static', filename='script.js') }}"></script>
+</body>
+</html>
