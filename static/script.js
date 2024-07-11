@@ -218,23 +218,14 @@ document.addEventListener('DOMContentLoaded', function() {
         relatedListViewBtn.classList.toggle('active', view === 'list');
         fetchRelatedVideos(folderPath);
     }
-        relatedCurrentView = view;
-        const relatedVideosContainer = document.getElementById('related-videos');
-        relatedVideosContainer.className = `${view}-view`;
-        relatedGridViewBtn.classList.toggle('active', view === 'grid');
         relatedListViewBtn.classList.toggle('active', view === 'list');
         fetchRelatedVideos(folderPath);
     }
+
     if (videoPlayer) {
         const currentVideoPath = videoPlayer.querySelector('source').src;
         console.log('Current video path:', currentVideoPath);
         folderPath = currentVideoPath.split('/').slice(0, -1).join('/');
-        console.log('Extracted folder path:', folderPath);
-        fetchRelatedVideos(folderPath);
-    }
-        const currentVideoPath = videoPlayer.querySelector('source').src;
-        console.log('Current video path:', currentVideoPath);
-        const folderPath = currentVideoPath.split('/').slice(0, -1).join('/');
         console.log('Extracted folder path:', folderPath);
         fetchRelatedVideos(folderPath);
     }
