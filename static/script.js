@@ -176,23 +176,6 @@ function fetchRelatedVideos(folderPath) {
         });
 }
 
-function fetchRelatedVideos(folderPath) {
-    console.log('Fetching related videos for folder:', folderPath);
-    // Remove '/video/' from the beginning of the path if it exists
-    folderPath = folderPath.replace(/^\/video\//, '');
-    fetch(`/api/related-videos?folder=${encodeURIComponent(folderPath)}`)
-        .then(response => response.json())
-        .then(data => {
-            console.log('Received related videos data:', data);
-            renderRelatedVideos(data);
-        })
-        .catch(error => {
-            console.error('Error fetching related videos:', error);
-            const relatedVideosContainer = document.getElementById('related-videos');
-            relatedVideosContainer.innerHTML = '<p>Error loading related videos. Please try again.</p>';
-        });
-}
-
 function renderRelatedVideos(videos) {
     const relatedVideosContainer = document.getElementById('related-videos');
     relatedVideosContainer.innerHTML = '';
