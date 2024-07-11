@@ -73,7 +73,7 @@ def play_video(filename):
         else:
             subs = []
 
-        return render_template('video.html', video_path=filename, subs=subs)
+        return render_template('video.html', video_path=filename, subs=subs, video_title=os.path.basename(filename))
     else:
         abort(404)
 

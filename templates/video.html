@@ -20,6 +20,7 @@
                     <track src="{{ url_for('serve_file', filename=sub) }}" kind="subtitles" srclang="en" label="English" default>
                     {% endfor %}
                 </video>
+                <h2>{{ video_title }}</h2>
                 <div class="custom-controls">
                     <button id="rewind">Rewind</button>
                     <button id="forward">Forward</button>
