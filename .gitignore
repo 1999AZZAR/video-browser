@@ -2,3 +2,4 @@ nohup.out
 .vscode/
 .git/
 .venv/
+.aider*

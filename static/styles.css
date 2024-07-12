@@ -1,20 +1,21 @@
+
 :root {
-    --primary-color: #2e2e2e;
-    --secondary-color: #3c3c3c;
-    --tertiary-color: #cfd8dc;
-    --quaternary-color: #e0e6ed;
-    --quinary-color: #6d6d6d;
-    --senary-color: #5e5e5e;
-    --septenary-color: #ff9800;
-    --octonary-color: #8bc34a;
-    --nonary-color: #00bcd4;
-    --denary-color: #ff5722;
+    --primary-color: #2F4F4F;
+    --secondary-color: #556B2F;
+    --tertiary-color: #5F9EA0;
+    --quaternary-color: #4682B4;
+    --quinary-color: #20B2AA;
+    --senary-color: #778899;
+    --septenary-color: #8FBC8F;
+    --octonary-color: #B0C4DE;
+    --nonary-color: #ADD8E6;
+    --denary-color: #87CEFA;
 }
 
 body {
     font-family: 'Kalnia', Kalnia, sans-serif;
     line-height: 1.4;
-    margin: 0;
+    max-height: 100vh;
     padding: 0;
     background-color: var(--primary-color);
     color: var(--quaternary-color);
@@ -27,9 +28,9 @@ body {
 }
 
 h1, h2 {
-    color: var(--tertiary-color);
+    color: var(--nonary-color);
     text-align: center;
-    margin-bottom: 30px;
+    margin-bottom: 1.2rem;
 }
 
 .search-container {
@@ -46,8 +47,8 @@ h1, h2 {
     flex-grow: 1;
     font-size: 16px;
     border-radius: 6px 0 0 6px;
-    background-color: var(--secondary-color);
-    color: var(--quaternary-color);
+    background-color: var(--senary-color);
+    color: var(--primary-color);
     height: 39px;
 }
 
@@ -73,12 +74,12 @@ h1, h2 {
 .view-toggle {
     display: flex;
     justify-content: flex-end;
-    margin-bottom: 2rem;
+    margin-bottom: 1.2rem;
 }
 
 .view-toggle button {
-    background-color: var(--secondary-color);
-    border: 1px solid var(--tertiary-color);
+    background-color: var(--tertiary-color);
+    border: 1px solid var(--senary-color);
     color: var(--tertiary-color);
     cursor: pointer;
     transition: background-color 0.3s, color 0.3s;
@@ -106,7 +107,7 @@ h1, h2 {
 }
 
 .view-toggle button.active {
-    background-color: var(--tertiary-color);
+    background-color: var(--senary-color);
     color: var(--primary-color);
 }
 
@@ -116,8 +117,9 @@ h1, h2 {
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
     padding: 1rem;
     gap: 1rem;
-    color: var(--quaternary-color);
+    color: var(--denary-color);
     margin-top: 1rem;
+    overflow-y: auto;
 }
 
 #file-structure.grid-view {
@@ -134,9 +136,12 @@ h1, h2 {
 #related-videos {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
-    gap: 1.2rem;
-    padding: 0 2rem;
-    margin-top: 2rem;
+    gap: 1rem;
+    padding: 1rem;
+    margin: 0 2rem;
+    background-color: var(--secondary-color);
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    border-radius: 15px;
 }
 
 .list-item {
@@ -164,7 +169,7 @@ h1, h2 {
 .grid-item span, .list-item span {
     word-break: break-word;
     max-width: 100%;
-    color: var(--tertiary-color);
+    color: var(--denary-color);
 }
 
 .grid-item {
@@ -207,18 +212,18 @@ h1, h2 {
 
 .back-link {
     display: inline-block;
-    color: var(--tertiary-color);
+    color: var(--octonary-color);
     text-decoration: none;
-    background-color: var(--secondary-color);
+    background-color: var(--quaternary-color);
     border-radius: 10px;
-    padding: 1.2rem 2rem;
+    padding: 1rem;
     cursor: pointer;
     margin-left: 2rem;
     transition: background-color 0.3s, color 0.3s;
 }
 
 .back-link:hover {
-    background-color: var(--quinary-color);
+    background-color: var(--denary-color);
 }
 
 .back-link img {
@@ -240,27 +245,27 @@ h1, h2 {
     max-width: 100%;
     width: -webkit-fill-available;
     height: auto;
-    border-radius: 8px;
-    box-shadow: 0px 0px 5px 8px rgba(0, 0, 0, 0.1);
+    border-radius: 10px;
+    box-shadow: 0px 0px 10px 15px rgb(0 0 0 / 15%);
 }
 
 #navigation-buttons {
     display: inline-flex;
     cursor: pointer;
     border-radius: 10px;
-    gap: 1rem;
+    gap: 0.8rem;
     transition: background-color 0.3s;
     background-color: unset;
     flex-direction: column;
-    justify-content: center;
     max-height: -webkit-fill-available;
 }
 
 #back-button, #home-button {
     display: inline-flex;
     align-items: center;
-    color: var(--tertiary-color);
+    color: var(--denary-color);
     text-decoration: none;
+    height: -webkit-fill-available;
     background-color: var(--senary-color);
     border-radius: 10px;
     padding: 0.8rem 1.2rem;
@@ -287,14 +292,16 @@ h1, h2 {
 /* Custom Control Buttons */
 .custom-controls {
     display: flex;
+    margin: 1rem 0;
     justify-content: center;
-    margin-top: 1rem;
+    align-items: center;
 }
 
 .custom-controls button {
-    background-color: var(--secondary-color);
-    border: 1px solid var(--tertiary-color);
-    color: var(--tertiary-color);
+    background-color: var(--senary-color);
+    border: 1px solid var(
+    --tertiary-color);
+    color: var(--octonary-color);
     cursor: pointer;
     transition: background-color 0.3s, color 0.3s;
     padding: 0.5rem 1rem;
@@ -306,4 +313,8 @@ h1, h2 {
 
 .custom-controls button:hover {
     background-color: var(--quinary-color);
+}
+
+.head {
+    display: block;
 }

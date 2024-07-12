@@ -29,16 +29,23 @@
             </div>
             <div class="related-videos-container">
                 <h2>Related Videos</h2>
-                <div class="view-toggle">
-                    <button id="related-grid-view-btn" class="active"><img src="/static/image/grid.png" alt="Grid View"></button>
-                    <button id="related-list-view-btn"><img src="/static/image/list.png" alt="List View"></button>
-                </div>
                 <div id="related-videos" class="grid-view"></div>
             </div>
         </div>
     </div>
     <script src="{{ url_for('static', filename='script.js') }}"></script>
     <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const videoPlayer = document.getElementById('video-player');
+            if (videoPlayer) {
+                const currentVideoPath = videoPlayer.querySelector('source').src;
+                console.log('Current video path:', currentVideoPath);
+                const folderPath = currentVideoPath.split('/').slice(0, -1).join('/');
+                console.log('Extracted folder path:', folderPath);
+                fetchRelatedVideos(folderPath);
+            }
+        });
+
         document.addEventListener('DOMContentLoaded', function() {
             const currentVideoPath = "{{ video_path }}";
             const folderPath = currentVideoPath.substring(0, currentVideoPath.lastIndexOf('/'));

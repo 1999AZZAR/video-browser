@@ -176,6 +176,23 @@ function fetchRelatedVideos(folderPath) {
         });
 }
 
+function fetchRelatedVideos(folderPath) {
+    console.log('Fetching related videos for folder:', folderPath);
+    // Remove '/video/' from the beginning of the path if it exists
+    folderPath = folderPath.replace(/^\/video\//, '');
+    fetch(`/api/related-videos?folder=${encodeURIComponent(folderPath)}`)
+        .then(response => response.json())
+        .then(data => {
+            console.log('Received related videos data:', data);
+            renderRelatedVideos(data);
+        })
+        .catch(error => {
+            console.error('Error fetching related videos:', error);
+            const relatedVideosContainer = document.getElementById('related-videos');
+            relatedVideosContainer.innerHTML = '<p>Error loading related videos. Please try again.</p>';
+        });
+}
+
 function renderRelatedVideos(videos) {
     const relatedVideosContainer = document.getElementById('related-videos');
     relatedVideosContainer.innerHTML = '';
@@ -186,7 +203,7 @@ function renderRelatedVideos(videos) {
     }
     videos.forEach(video => {
         const videoElement = document.createElement('div');
-        videoElement.className = relatedCurrentView === 'grid' ? 'grid-item' : 'list-item';
+        videoElement.className = 'grid-item';
         videoElement.innerHTML = `
             <img src="/static/image/video.png" alt="Video thumbnail">
             <span>${video.name}</span>
@@ -198,35 +215,3 @@ function renderRelatedVideos(videos) {
         relatedVideosContainer.appendChild(videoElement);
     });
 }
-
-// Make sure this part is included in your video.html or adjust accordingly
-document.addEventListener('DOMContentLoaded', function() {
-    const videoPlayer = document.getElementById('video-player');
-    const relatedGridViewBtn = document.getElementById('related-grid-view-btn');
-    const relatedListViewBtn = document.getElementById('related-list-view-btn');
-    let relatedCurrentView = 'grid';
-    let folderPath = '';
-
-    relatedGridViewBtn.addEventListener('click', () => setRelatedView('grid'));
-    relatedListViewBtn.addEventListener('click', () => setRelatedView('list'));
-
-    function setRelatedView(view) {
-        relatedCurrentView = view;
-        const relatedVideosContainer = document.getElementById('related-videos');
-        relatedVideosContainer.className = `${view}-view`;
-        relatedGridViewBtn.classList.toggle('active', view === 'grid');
-        relatedListViewBtn.classList.toggle('active', view === 'list');
-        fetchRelatedVideos(folderPath);
-    }
-        relatedListViewBtn.classList.toggle('active', view === 'list');
-        fetchRelatedVideos(folderPath);
-    }
-
-    if (videoPlayer) {
-        const currentVideoPath = videoPlayer.querySelector('source').src;
-        console.log('Current video path:', currentVideoPath);
-        folderPath = currentVideoPath.split('/').slice(0, -1).join('/');
-        console.log('Extracted folder path:', folderPath);
-        fetchRelatedVideos(folderPath);
-    }
-});
