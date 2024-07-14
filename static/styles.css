@@ -1,15 +1,15 @@
 
 :root {
-    --primary-color: #000000;
-    --secondary-color: #1a1a1a;
-    --tertiary-color: #333333;
-    --quaternary-color: #4d4d4d;
-    --quinary-color: #666666;
-    --senary-color: #808080;
-    --septenary-color: #999999;
-    --octonary-color: #b3b3b3;
-    --nonary-color: #cccccc;
-    --denary-color: #e6e6e6;
+    --primary-color: #2C0D0D;
+    --secondary-color: #48312a;
+    --tertiary-color: #645547;
+    --quaternary-color: #807964;
+    --quinary-color: #9c9d81;
+    --senary-color: #b8c19e;
+    --septenary-color: #d4e5bb;
+    --octonary-color: #f0ffd8;
+    --nonary-color: #fffff5;
+    --denary-color: #FFFFFF;
 }
 
 body {
@@ -169,7 +169,7 @@ h1, h2 {
 .grid-item span, .list-item span {
     word-break: break-word;
     max-width: 100%;
-    color: var(--denary-color);
+    color: var(--tertiary-color);
 }
 
 .grid-item {
@@ -263,7 +263,7 @@ h1, h2 {
 #back-button, #home-button {
     display: inline-flex;
     align-items: center;
-    color: var(--denary-color);
+    color: var(--tertiary-color);
     text-decoration: none;
     height: -webkit-fill-available;
     background-color: var(--senary-color);
@@ -299,9 +299,8 @@ h1, h2 {
 
 .custom-controls button {
     background-color: var(--senary-color);
-    border: 1px solid var(
-    --tertiary-color);
-    color: var(--octonary-color);
+    border: 1px solid var(--tertiary-color);
+    color: var(--secondary-color);
     cursor: pointer;
     transition: background-color 0.3s, color 0.3s;
     padding: 0.5rem 1rem;

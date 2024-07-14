@@ -10,7 +10,7 @@ app = Flask(__name__)
 # Configure caching
 cache = Cache(app, config={'CACHE_TYPE': 'simple'})
 
-VIDEO_DIR = '/home/azzar/Videos/Video/films'
+VIDEO_DIR = '/home/azzar/Videos/Video/'
 SUBTITLE_EXTENSIONS = ['.vtt','.stt']
 
 @cache.memoize(300)
