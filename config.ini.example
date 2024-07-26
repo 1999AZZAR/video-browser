@@ -1,0 +1,16 @@
+[Paths]
+VIDEO_DIR = /path/to/video/folder
+
+[Subtitles]
+EXTENSIONS = .vtt,.stt
+
+[Videos]
+EXTENSIONS = .ts,.mp4,.avi,.mov,.mkv,.webm
+
+[Server]
+HOST = 0.0.0.0
+PORT = 5000
+BASE_URL = http://127.0.0.1:5000/video/
+
+[Display]
+SHOW_HIDDEN = false

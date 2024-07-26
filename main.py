@@ -4,34 +4,46 @@ from flask_caching import Cache
 import os
 import subprocess
 import urllib.parse
+import configparser
 
 app = Flask(__name__)
+
+# Read configuration
+config = configparser.ConfigParser()
+config.read('config.ini')
 
 # Configure caching
 cache = Cache(app, config={'CACHE_TYPE': 'simple'})
 
-VIDEO_DIR = '/home/azzar/Videos/Video/'
-SUBTITLE_EXTENSIONS = ['.vtt','.stt']
+VIDEO_DIR = config.get('Paths', 'VIDEO_DIR')
+SUBTITLE_EXTENSIONS = config.get('Subtitles', 'EXTENSIONS').split(',')
+SHOW_HIDDEN = config.getboolean('Display', 'SHOW_HIDDEN')
 
 @cache.memoize(300)
 def get_directory_structure(path):
     structure = []
     try:
         for root, dirs, files in os.walk(path):
+            if not SHOW_HIDDEN:
+                # Remove hidden directories
+                dirs[:] = [d for d in dirs if not d.startswith('.')]
+
             rel_path = os.path.relpath(root, VIDEO_DIR)
             if rel_path != '.':
-                structure.append({
-                    'type': 'folder',
-                    'name': os.path.basename(root),
-                    'path': rel_path
-                })
-            for file in files:
-                if file.lower().endswith(('.ts', '.mp4', '.avi', '.mov', '.mkv', '.webm')):
+                if SHOW_HIDDEN or not os.path.basename(root).startswith('.'):
                     structure.append({
-                        'type': 'file',
-                        'name': file,
-                        'path': os.path.join(rel_path, file)
+                        'type': 'folder',
+                        'name': os.path.basename(root),
+                        'path': rel_path
                     })
+            for file in files:
+                if SHOW_HIDDEN or not file.startswith('.'):
+                    if file.lower().endswith(tuple(config.get('Videos', 'EXTENSIONS').split(','))):
+                        structure.append({
+                            'type': 'file',
+                            'name': file,
+                            'path': os.path.join(rel_path, file)
+                        })
     except Exception:
         pass
     return structure
@@ -87,19 +99,20 @@ def serve_file(filename):
 @app.route('/api/related-videos')
 def api_related_videos():
     folder = urllib.parse.unquote(request.args.get('folder', ''))
-    if folder.startswith('http://127.0.0.1:5000/video/'):
-        folder = folder[len('http://127.0.0.1:5000/video/'):]
+    if folder.startswith(config.get('Server', 'BASE_URL')):
+        folder = folder[len(config.get('Server', 'BASE_URL')):]
     folder_path = os.path.join(VIDEO_DIR, folder)
     related_videos = []
     if os.path.isdir(folder_path):
         for file in os.listdir(folder_path):
-            if file.lower().endswith(('ts', '.mp4', '.avi', '.mov', '.mkv', '.webm')):
-                video_path = os.path.join(folder, file)
-                related_videos.append({
-                    'name': file,
-                    'path': video_path
-                })
+            if SHOW_HIDDEN or not file.startswith('.'):
+                if file.lower().endswith(tuple(config.get('Videos', 'EXTENSIONS').split(','))):
+                    video_path = os.path.join(folder, file)
+                    related_videos.append({
+                        'name': file,
+                        'path': video_path
+                    })
     return jsonify(related_videos)
 
 if __name__ == '__main__':
-    app.run(host='0.0.0.0', port=5000)
+    app.run(host=config.get('Server', 'HOST'), port=config.getint('Server', 'PORT'))

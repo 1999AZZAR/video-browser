@@ -3,3 +3,4 @@ nohup.out
 .git/
 .venv/
 .aider*
+*.ini

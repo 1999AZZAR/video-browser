@@ -53,11 +53,9 @@ This project is a Flask application for streaming videos from a specified direct
 
 ## Configuration
 
-Update the `VIDEO_DIR` in `app.py` to point to your video directory:
+1. Rename the `config.ini.example` to `config.ini`
 
-```python
-VIDEO_DIR = '/path/to/your/video/directory'
-```
+2. Update the `VIDEO_DIR` to point to your video directory
 
 ## Usage
 
