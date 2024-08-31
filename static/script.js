@@ -64,9 +64,15 @@ document.addEventListener('DOMContentLoaded', function() {
         items.forEach(item => {
             const itemElement = document.createElement('div');
             itemElement.className = currentView === 'grid' ? 'grid-item' : 'list-item';
-            const iconPath = item.type === 'folder' ? '/static/image/folder.png' : '/static/image/video.png';
+            let iconPath;
+            if (item.type === 'folder') {
+                iconPath = '/static/image/folder.png';
+            } else {
+                // Use the actual thumbnail for video files
+                iconPath = item.thumbnail ? `/thumbnail/${encodeURIComponent(item.path)}` : '/static/image/video.png';
+            }
             itemElement.innerHTML = `
-                <img src="${iconPath}" alt="${item.type} icon">
+                <img src="${iconPath}" alt="${item.type} icon" class="item-thumbnail">
                 <span>${item.name}</span>
             `;
             if (item.type === 'folder') {
@@ -158,23 +164,7 @@ document.addEventListener('DOMContentLoaded', function() {
     function playVideo(video) {
         window.location.href = `/play/${video.path}`;
     }
-
 });
-
-function fetchRelatedVideos(folderPath) {
-    console.log('Fetching related videos for folder:', folderPath);
-    fetch(`/api/related-videos?folder=${encodeURIComponent(folderPath)}`)
-        .then(response => response.json())
-        .then(data => {
-            console.log('Received related videos data:', data);
-            renderRelatedVideos(data);
-        })
-        .catch(error => {
-            console.error('Error fetching related videos:', error);
-            const relatedVideosContainer = document.getElementById('related-videos');
-            relatedVideosContainer.innerHTML = '<p>Error loading related videos. Please try again.</p>';
-        });
-}
 
 function fetchRelatedVideos(folderPath) {
     console.log('Fetching related videos for folder:', folderPath);
@@ -204,8 +194,9 @@ function renderRelatedVideos(videos) {
     videos.forEach(video => {
         const videoElement = document.createElement('div');
         videoElement.className = 'grid-item';
+        const thumbnailPath = video.thumbnail ? `/thumbnail/${encodeURIComponent(video.path)}` : '/static/image/video.png';
         videoElement.innerHTML = `
-            <img src="/static/image/video.png" alt="Video thumbnail">
+            <img src="${thumbnailPath}" alt="Video thumbnail" class="video-thumbnail">
             <span>${video.name}</span>
         `;
         videoElement.addEventListener('click', () => {
