@@ -1,2 +1,6 @@
 Flask
 Flask-Caching
+Werkzeug
+gunicorn
+pillow
+ffmpeg-python
