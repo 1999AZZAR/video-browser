@@ -7,7 +7,7 @@ import logging
 import socket
 import warnings
 from typing import List, Dict, Optional
-
+from concurrent.futures import ThreadPoolExecutor
 from flask import Flask, render_template, send_file, abort, jsonify, request
 from flask_caching import Cache
 
@@ -19,6 +19,7 @@ class VideoServer:
         self._configure_logging()
         self._configure_routes()
         self._ensure_thumbnail_dir()
+        self.executor = ThreadPoolExecutor(max_workers=os.cpu_count() or 4)  # Hardware parallelization
 
     def _load_config(self, config_path: str) -> configparser.ConfigParser:
         config = configparser.ConfigParser()
@@ -122,8 +123,9 @@ class VideoServer:
         output_path = os.path.splitext(video_path)[0] + '.vtt'
         if not os.path.exists(output_path):
             try:
+                # Utilize hardware acceleration with VAAPI, NVENC, etc.
                 subprocess.run(
-                    ['ffmpeg', '-i', video_path, '-map', '0:s:0', output_path],
+                    ['ffmpeg', '-hwaccel', 'auto', '-i', video_path, '-map', '0:s:0', output_path],
                     check=True, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL
                 )
             except subprocess.CalledProcessError:
@@ -143,12 +145,10 @@ class VideoServer:
         thumbnail_path = self.get_thumbnail_path(video_path)
         if not os.path.exists(thumbnail_path):
             try:
+                # Enable hardware acceleration
                 subprocess.run([
-                    'ffmpeg',
-                    '-i', video_path,
-                    '-ss', '00:00:05',
-                    '-vframes', '1',
-                    '-vf', 'scale=320:-1',
+                    'ffmpeg', '-hwaccel', 'auto', '-i', video_path,
+                    '-ss', '00:00:05', '-vframes', '1', '-vf', 'scale=320:-1',
                     thumbnail_path
                 ], check=True, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
             except subprocess.CalledProcessError:
@@ -166,7 +166,7 @@ class VideoServer:
         full_path = os.path.join(self.video_dir, filename)
         if os.path.isfile(full_path):
             if filename.lower().endswith('.mkv'):
-                subtitle_path = self.extract_subtitles(full_path)
+                subtitle_path = self.executor.submit(self.extract_subtitles, full_path).result()
             else:
                 subtitle_path = os.path.splitext(full_path)[0] + '.vtt'
 
@@ -185,7 +185,7 @@ class VideoServer:
 
     def serve_thumbnail(self, filename):
         full_path = os.path.join(self.video_dir, urllib.parse.unquote_plus(filename))
-        thumbnail_path = self.generate_thumbnail(full_path)
+        thumbnail_path = self.executor.submit(self.generate_thumbnail, full_path).result()
         if thumbnail_path:
             return send_file(thumbnail_path)
         else:
