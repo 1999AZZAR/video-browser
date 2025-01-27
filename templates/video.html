@@ -9,28 +9,26 @@
     <link rel="icon" type="image/x-icon" href="{{ url_for('static', filename='image/icon.png') }}">
 </head>
 <body>
-    <div class="container">
-        <h1>Player</h1>
-        <div class="content-wrapper">
-            <div class="video-container">
-                <video id="video-player" controls>
-                    <source src="{{ url_for('serve_file', filename=video_path) }}" type="video/mp4">
-                    Your browser does not support the video tag.
-                    {% for sub in subs %}
-                    <track src="{{ url_for('serve_file', filename=sub) }}" kind="subtitles" srclang="en" label="English" default>
-                    {% endfor %}
-                </video>
-                <h2>{{ video_title }}</h2>
-                <div class="custom-controls">
-                    <button id="rewind">Rewind</button>
-                    <button id="forward">Forward</button>
-                </div>
-                <a href="{{ url_for('index') }}" class="back-link">Back to Video List</a>
-                <div class="related-videos-container">
-                    <h2>Related Videos</h2>
-                    <div id="related-videos" class="grid-view"></div>
-                </div>
+    <div class="video-player-container">
+        <div class="video-wrapper">
+            <video id="video-player" controls>
+                <source src="{{ url_for('serve_file', filename=video_path) }}" type="video/mp4">
+                Your browser does not support the video tag.
+                {% for sub in subs %}
+                <track src="{{ url_for('serve_file', filename=sub) }}" kind="subtitles" srclang="en" label="English" default>
+                {% endfor %}
+            </video>
+            <div class="video-controls">
+                <button id="play-pause" title="Play/Pause">▶️</button>
+                <button id="rewind" title="Rewind 10 Seconds">⏪</button>
+                <button id="forward" title="Forward 10 Seconds">⏩</button>
+                <button id="fullscreen" title="Fullscreen">⛶</button>
             </div>
+        </div>
+        <a href="{{ url_for('index') }}" class="back-link">Back to Video List</a>
+        <div class="related-videos-container">
+            <h2>Related Videos</h2>
+            <div id="related-videos" class="grid-view"></div>
         </div>
     </div>
     <script src="{{ url_for('static', filename='script.js') }}"></script>
@@ -39,29 +37,50 @@
             const videoPlayer = document.getElementById('video-player');
             if (videoPlayer) {
                 const currentVideoPath = videoPlayer.querySelector('source').src;
-                console.log('Current video path:', currentVideoPath);
                 const folderPath = currentVideoPath.split('/').slice(0, -1).join('/');
-                console.log('Extracted folder path:', folderPath);
                 fetchRelatedVideos(folderPath);
             }
+
+            const playPauseButton = document.getElementById('play-pause');
+            const rewindButton = document.getElementById('rewind');
+            const forwardButton = document.getElementById('forward');
+            const fullscreenButton = document.getElementById('fullscreen');
+
+            playPauseButton.addEventListener('click', function() {
+                if (videoPlayer.paused) {
+                    videoPlayer.play();
+                    playPauseButton.textContent = '⏸️';
+                } else {
+                    videoPlayer.pause();
+                    playPauseButton.textContent = '▶️';
+                }
+            });
+
+            rewindButton.addEventListener('click', function() {
+                videoPlayer.currentTime = Math.max(0, videoPlayer.currentTime - 10);
+            });
+
+            forwardButton.addEventListener('click', function() {
+                videoPlayer.currentTime = Math.min(videoPlayer.duration, videoPlayer.currentTime + 10);
+            });
+
+            fullscreenButton.addEventListener('click', function() {
+                if (videoPlayer.requestFullscreen) {
+                    videoPlayer.requestFullscreen();
+                } else if (videoPlayer.mozRequestFullScreen) { /* Firefox */
+                    videoPlayer.mozRequestFullScreen();
+                } else if (videoPlayer.webkitRequestFullscreen) { /* Chrome, Safari & Opera */
+                    videoPlayer.webkitRequestFullscreen();
+                } else if (videoPlayer.msRequestFullscreen) { /* IE/Edge */
+                    videoPlayer.msRequestFullscreen();
+                }
+            });
         });
 
         document.addEventListener('DOMContentLoaded', function() {
             const currentVideoPath = "{{ video_path }}";
             const folderPath = currentVideoPath.substring(0, currentVideoPath.lastIndexOf('/'));
             fetchRelatedVideos(folderPath);
-
-            const video = document.getElementById('video-player');
-            const rewindButton = document.getElementById('rewind');
-            const forwardButton = document.getElementById('forward');
-
-            rewindButton.addEventListener('click', function() {
-                video.currentTime = Math.max(0, video.currentTime - 10);
-            });
-
-            forwardButton.addEventListener('click', function() {
-                video.currentTime = Math.min(video.duration, video.currentTime + 10);
-            });
         });
     </script>
 </body>
